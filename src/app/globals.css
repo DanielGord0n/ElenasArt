@@ -1,0 +1,19 @@
+@import "tailwindcss";
+
+@theme {
+  --color-lavender-light: #f7f5ff;
+  --color-lavender-DEFAULT: #eaddff;
+  --color-lavender-dark: #d1c4e9;
+  
+  --color-gold-light: #fadd78;
+  --color-gold-DEFAULT: #d4af37;
+  --color-gold-dark: #a68b2b;
+
+  --font-serif: var(--font-playfair), serif;
+  --font-sans: var(--font-inter), sans-serif;
+}
+
+body {
+  font-family: var(--font-sans);
+  background-color: var(--color-lavender-light);
+}
