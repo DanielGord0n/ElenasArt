@@ -1,14 +1,13 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { Painting } from "@/types/painting";
 import { useLanguage } from "@/context/LanguageContext";
-import { ArrowLeft, ArrowRight, PlayCircle, PauseCircle } from "lucide-react";
+import { ArrowLeft, ArrowRight, PlayCircle, PauseCircle, Maximize2, X, Image as ImageIcon } from "lucide-react";
 import { FallingSnow } from "@/components/effects/FallingSnow";
 import { FloatingParticles } from "@/components/effects/FloatingParticles";
 import { GlowPulse } from "@/components/effects/GlowPulse";
-
 import { FlowingInk } from "@/components/effects/FlowingInk";
 
 interface PaintingDetailProps {
@@ -21,8 +20,19 @@ export function PaintingDetail({ painting, prevSlug, nextSlug }: PaintingDetailP
     const { t, language } = useLanguage();
     const [isPlaying, setIsPlaying] = useState(false);
 
+    // Fullscreen logic
+    const [isFullscreen, setIsFullscreen] = useState(false);
+    const [showFullscreenVideo, setShowFullscreenVideo] = useState(false);
+
     const description = language === "en" ? painting.description_en : painting.description_ru;
     const statusLabel = t.common[painting.status];
+
+    // Reset video state when toggling fullscreen
+    useEffect(() => {
+        if (!isFullscreen) {
+            setShowFullscreenVideo(false);
+        }
+    }, [isFullscreen]);
 
     // Determine which animation to show based on slug
     const renderBackgroundEffects = () => {
@@ -33,7 +43,6 @@ export function PaintingDetail({ painting, prevSlug, nextSlug }: PaintingDetailP
                 return <FlowingInk />;
             case "moonlit-sakura":
                 return (
-                    // Pink petals and some white sparkles
                     <>
                         <FloatingParticles color="255, 183, 197" count={40} />
                         <FloatingParticles color="255, 255, 255" count={20} />
@@ -55,11 +64,53 @@ export function PaintingDetail({ painting, prevSlug, nextSlug }: PaintingDetailP
 
     return (
         <div className="relative min-h-screen">
+            {/* Fullscreen Overlay */}
+            {isFullscreen && (
+                <div className="fixed inset-0 z-50 bg-black flex flex-col items-center justify-center p-4">
+                    <button
+                        onClick={() => setIsFullscreen(false)}
+                        className="absolute top-4 right-4 text-white/50 hover:text-white transition-colors"
+                    >
+                        <X size={32} />
+                    </button>
+
+                    <div className="relative w-full h-full max-w-7xl max-h-[90vh] flex items-center justify-center">
+                        {showFullscreenVideo && painting.videoUrl ? (
+                            <video
+                                src={painting.videoUrl}
+                                autoPlay
+                                loop
+                                muted
+                                playsInline
+                                className="max-w-full max-h-full object-contain"
+                            />
+                        ) : (
+                            <img
+                                src={painting.imageUrl}
+                                alt={painting.title}
+                                className="max-w-full max-h-full object-contain"
+                            />
+                        )}
+
+                        {/* Toggle Control in Fullscreen */}
+                        {painting.videoUrl && (
+                            <button
+                                onClick={() => setShowFullscreenVideo(!showFullscreenVideo)}
+                                className="absolute bottom-8 left-1/2 -translate-x-1/2 bg-black/50 hover:bg-black/70 text-white px-6 py-3 rounded-full backdrop-blur-sm flex items-center gap-2 transition-all"
+                            >
+                                {showFullscreenVideo ? <ImageIcon size={20} /> : <PlayCircle size={20} />}
+                                {showFullscreenVideo ? "Show Image" : "Play Video"}
+                            </button>
+                        )}
+                    </div>
+                </div>
+            )}
+
             {/* 1. Dynamic Background Color Layer */}
             <div
                 className="absolute inset-0 transition-colors duration-1000 ease-in-out"
                 style={{
-                    backgroundColor: isWinterScene ? '#3D3B63' : '#FDFBF7' // Lighter purple vs Lavender-light (default)
+                    backgroundColor: isWinterScene ? '#3D3B63' : '#FDFBF7'
                 }}
             />
 
@@ -77,7 +128,16 @@ export function PaintingDetail({ painting, prevSlug, nextSlug }: PaintingDetailP
 
                 <div className="flex flex-col items-center space-y-10">
                     {/* Main Image Container */}
-                    <div className="relative w-full max-w-2xl bg-white p-4 border-[8px] border-double border-gold-DEFAULT shadow-2xl rounded-sm">
+                    <div className="relative w-full max-w-2xl bg-white p-4 border-[8px] border-double border-gold-DEFAULT shadow-2xl rounded-sm group">
+
+                        {/* Fullscreen Trigger */}
+                        <button
+                            onClick={() => setIsFullscreen(true)}
+                            className="absolute top-6 right-6 z-30 p-2 bg-black/20 hover:bg-black/40 text-white rounded-full opacity-0 group-hover:opacity-100 transition-opacity backdrop-blur-sm"
+                        >
+                            <Maximize2 size={20} />
+                        </button>
+
                         <div className="relative aspect-[4/5] w-full overflow-hidden bg-gray-100">
                             {/* Image */}
                             <img
@@ -86,7 +146,7 @@ export function PaintingDetail({ painting, prevSlug, nextSlug }: PaintingDetailP
                                 className={`w-full h-full object-cover transition-opacity duration-1000 ${isPlaying && painting.videoUrl ? 'opacity-0' : 'opacity-100'}`}
                             />
 
-                            {/* Video Overlay */}
+                            {/* Video Overlay (In-page) */}
                             {isPlaying && painting.videoUrl && (
                                 <div className="absolute inset-0 z-20 flex items-center justify-center bg-black">
                                     <video
@@ -136,8 +196,8 @@ export function PaintingDetail({ painting, prevSlug, nextSlug }: PaintingDetailP
                                 <button
                                     onClick={() => setIsPlaying(!isPlaying)}
                                     className={`inline-flex items-center gap-2 px-6 py-2.5 rounded-full transition-all font-medium ${isPlaying
-                                            ? "bg-gold-light/20 text-gold-dark border border-gold-DEFAULT/30"
-                                            : "bg-lavender-dark/20 hover:bg-gold-light/20 text-indigo-900 border border-transparent"
+                                        ? "bg-gold-light/20 text-gold-dark border border-gold-DEFAULT/30"
+                                        : "bg-lavender-dark/20 hover:bg-gold-light/20 text-indigo-900 border border-transparent"
                                         }`}
                                 >
                                     {isPlaying ? <PauseCircle size={20} /> : <PlayCircle size={20} />}
