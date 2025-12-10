@@ -48,12 +48,11 @@ export function Hero() {
             {/* Image / Portrait */}
             <div className="flex-1 w-full max-w-md md:max-w-lg relative">
                 <div className="relative aspect-[3/4] rounded-t-full rounded-b-[100px] overflow-hidden border-8 border-white shadow-2xl">
-                    {/* Placeholder for Elena's portrait */}
-                    <div className="w-full h-full bg-gray-200 flex items-center justify-center text-gray-400">
-                        <span className="sr-only">Elena's Portrait</span>
-                        {/* Using a generic placeholder image or just a div */}
-                        <div className="absolute inset-0 bg-gradient-to-br from-lavender-dark/30 to-gold-light/30 animate-pulse" />
-                    </div>
+                    <img
+                        src="/elena-portrait.jpg"
+                        alt="Elena Gordon"
+                        className="w-full h-full object-cover"
+                    />
                 </div>
                 {/* Decorative elements */}
                 <div className="absolute -z-10 top-10 -right-10 w-full h-full rounded-t-full rounded-b-[100px] border-2 border-gold-DEFAULT/30" />

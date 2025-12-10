@@ -33,8 +33,9 @@ export function Navbar() {
                 {/* Brand */}
                 <Link
                     href="/"
-                    className="font-serif text-2xl font-bold tracking-tight text-gray-900 hover:text-gold-dark transition-colors"
+                    className="flex items-center gap-3 font-serif text-2xl font-bold tracking-tight text-gray-900 hover:text-gold-dark transition-colors"
                 >
+                    <img src="/logo.png" alt="Logo" className="h-10 w-auto" />
                     {t.nav.brand}
                 </Link>
 

@@ -1,23 +1,24 @@
 import type { Metadata } from "next";
-import { Playfair_Display, Inter } from "next/font/google";
+import { Cormorant_Garamond, Montserrat } from "next/font/google";
 import "./globals.css";
 import { LanguageProvider } from "@/context/LanguageContext";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 
-const playfair = Playfair_Display({
-  variable: "--font-playfair",
-  subsets: ["latin"],
+const cormorant = Cormorant_Garamond({
+  variable: "--font-serif",
+  subsets: ["latin", "cyrillic"], // Added cyrillic for Russian support
+  weight: ["300", "400", "500", "600", "700"],
 });
 
-const inter = Inter({
-  variable: "--font-inter",
-  subsets: ["latin"],
+const montserrat = Montserrat({
+  variable: "--font-sans",
+  subsets: ["latin", "cyrillic"],
 });
 
 export const metadata: Metadata = {
-  title: "Elena Gordon's Art",
-  description: "Elena Gordon's creative works",
+  title: "Elena Gordon | Creative Portfolio",
+  description: "Creative portfolio of Elena Gordon.",
 };
 
 export default function RootLayout({
@@ -28,7 +29,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${playfair.variable} ${inter.variable} antialiased bg-lavender-light text-gray-900 font-sans`}
+        className={`${cormorant.variable} ${montserrat.variable} antialiased bg-lavender-light text-gray-900 font-sans`}
       >
         <LanguageProvider>
           <div className="flex flex-col min-h-screen">

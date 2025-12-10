@@ -7,7 +7,7 @@ import { useState } from "react";
 export default function ContactPage() {
     const { t } = useLanguage();
     const [copied, setCopied] = useState(false);
-    const email = "elena.gordon.art@example.com"; // Placeholder as requested
+    const email = "gordonel@gmail.com"; // Placeholder as requested
 
     const copyToClipboard = () => {
         navigator.clipboard.writeText(email);
