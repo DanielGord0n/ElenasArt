@@ -27,12 +27,15 @@ export function PaintingDetail({ painting, prevSlug, nextSlug }: PaintingDetailP
     const description = language === "en" ? painting.description_en : painting.description_ru;
     const statusLabel = t.common[painting.status];
 
-    // Reset video state when toggling fullscreen
+    // Auto-play video 3 seconds after mounting (if available), then stop on end
     useEffect(() => {
-        if (!isFullscreen) {
-            setShowFullscreenVideo(false);
+        if (painting.videoUrl) {
+            const timer = setTimeout(() => {
+                setIsPlaying(true);
+            }, 3000);
+            return () => clearTimeout(timer);
         }
-    }, [isFullscreen]);
+    }, [painting.videoUrl]); // Run once when videoUrl is available
 
     // Determine which animation to show based on slug
     const renderBackgroundEffects = () => {
@@ -79,9 +82,9 @@ export function PaintingDetail({ painting, prevSlug, nextSlug }: PaintingDetailP
                             <video
                                 src={painting.videoUrl}
                                 autoPlay
-                                loop
                                 muted
                                 playsInline
+                                onEnded={() => setShowFullscreenVideo(false)}
                                 className="max-w-full max-h-full object-contain"
                             />
                         ) : (
@@ -127,7 +130,7 @@ export function PaintingDetail({ painting, prevSlug, nextSlug }: PaintingDetailP
                 </Link>
 
                 <div className="flex flex-col items-center space-y-10">
-                    {/* Main Image Container */}
+                    {/* Main Image Container with Frame */}
                     <div className="relative w-full max-w-2xl bg-white p-4 border-[8px] border-double border-gold-DEFAULT shadow-2xl rounded-sm group">
 
                         {/* Fullscreen Trigger */}
@@ -137,6 +140,17 @@ export function PaintingDetail({ painting, prevSlug, nextSlug }: PaintingDetailP
                         >
                             <Maximize2 size={20} />
                         </button>
+
+                        {/* Replay Button (Bottom Right) */}
+                        {!isPlaying && painting.videoUrl && (
+                            <button
+                                onClick={() => setIsPlaying(true)}
+                                className="absolute bottom-6 right-6 z-30 p-2 bg-white/80 hover:bg-white text-gold-dark rounded-full shadow-lg transition-all hover:scale-105"
+                                title="Replay Animation"
+                            >
+                                <PlayCircle size={24} />
+                            </button>
+                        )}
 
                         <div className="relative aspect-[4/5] w-full overflow-hidden bg-gray-100">
                             {/* Image */}
@@ -152,9 +166,9 @@ export function PaintingDetail({ painting, prevSlug, nextSlug }: PaintingDetailP
                                     <video
                                         src={painting.videoUrl}
                                         autoPlay
-                                        loop
                                         muted
                                         playsInline
+                                        onEnded={() => setIsPlaying(false)}
                                         className="w-full h-full object-cover"
                                     />
                                 </div>
@@ -186,29 +200,6 @@ export function PaintingDetail({ painting, prevSlug, nextSlug }: PaintingDetailP
                         <p className={`text-lg leading-relaxed font-light transition-colors duration-1000 ${isWinterScene ? 'text-gray-200' : 'text-gray-700'}`}>
                             {description}
                         </p>
-
-                        {/* AI Video Feature */}
-                        <div className="pt-6">
-                            <p className="text-sm font-medium text-gray-400 mb-3 uppercase tracking-wider">
-                                {t.gallery.makeAlive}
-                            </p>
-                            {painting.videoUrl ? (
-                                <button
-                                    onClick={() => setIsPlaying(!isPlaying)}
-                                    className={`inline-flex items-center gap-2 px-6 py-2.5 rounded-full transition-all font-medium ${isPlaying
-                                        ? "bg-gold-light/20 text-gold-dark border border-gold-DEFAULT/30"
-                                        : "bg-lavender-dark/20 hover:bg-gold-light/20 text-indigo-900 border border-transparent"
-                                        }`}
-                                >
-                                    {isPlaying ? <PauseCircle size={20} /> : <PlayCircle size={20} />}
-                                    {isPlaying ? "Pause animation" : t.gallery.playVideo}
-                                </button>
-                            ) : (
-                                <div className="inline-block px-4 py-2 bg-gray-100 text-gray-400 rounded-lg text-sm italic">
-                                    {t.gallery.comingSoon}
-                                </div>
-                            )}
-                        </div>
                     </div>
 
                     {/* Navigation */}
