@@ -55,7 +55,7 @@ export function Hero() {
                     />
                 </div>
                 {/* Decorative elements */}
-                <div className="absolute -z-10 top-10 -right-10 w-full h-full rounded-t-full rounded-b-[100px] border-2 border-gold-DEFAULT/30" />
+                <div className="absolute -z-10 top-6 -right-4 md:top-10 md:-right-10 w-full h-full rounded-t-full rounded-b-[100px] border-2 border-gold-DEFAULT/30" />
             </div>
         </section>
     );
