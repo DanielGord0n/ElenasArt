@@ -27,13 +27,10 @@ export function PaintingDetail({ painting, prevSlug, nextSlug }: PaintingDetailP
     const description = language === "en" ? painting.description_en : painting.description_ru;
     const statusLabel = t.common[painting.status];
 
-    // Auto-play video 3 seconds after mounting (if available), then stop on end
+    // Auto-play video immediately after mounting (if available), then stop on end
     useEffect(() => {
         if (painting.videoUrl) {
-            const timer = setTimeout(() => {
-                setIsPlaying(true);
-            }, 3000);
-            return () => clearTimeout(timer);
+            setIsPlaying(true);
         }
     }, [painting.videoUrl]); // Run once when videoUrl is available
 
