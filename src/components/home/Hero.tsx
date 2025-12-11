@@ -21,10 +21,7 @@ export function Hero() {
                 </div>
 
                 <p className="text-lg text-gray-700 leading-relaxed max-w-2xl mx-auto md:mx-0 font-light">
-                    {language === 'en'
-                        ? t.home.heroIntro
-                        : "Елена Гордон — художница..." // Fallback or use what's in 't' 
-                    }
+                    {t.home.heroIntro}
                     {/* Note: t.home.heroIntro is already localized in context */}
                 </p>
 
