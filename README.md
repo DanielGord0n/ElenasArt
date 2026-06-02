@@ -2,11 +2,11 @@
 
 A bilingual digital portfolio built as a gift for my mother, Elena Gordon, a Toronto-based painter with 10 years of work across acrylic and pencil. The core idea: use generative AI to bring her physical paintings to life as subtle, cinematic animations.
 
-[Live Site](#) &nbsp;·&nbsp; [View Gallery](#)
+[Live Site](https://elenas-art.vercel.app) &nbsp;·&nbsp; [View Gallery](https://elenas-art.vercel.app/gallery)
 
 ---
 
-![Elena's Art Preview](public/paintings/preview.jpg)
+![Elena's Art Preview](https://elenas-art.vercel.app/paintings/lotus-sunrise.jpeg)
 
 ---
 
