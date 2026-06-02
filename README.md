@@ -6,7 +6,7 @@ A bilingual digital portfolio built as a gift for my mother, Elena Gordon, a Tor
 
 ---
 
-![Elena's Art Preview](https://elenas-art.vercel.app/paintings/lotus-sunrise.jpeg)
+![Elena's Art Preview](https://elenas-art.vercel.app/paintings/moonlit-sakura.jpeg)
 
 ---
 
